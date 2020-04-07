@@ -1,0 +1,208 @@
+\documentclass{article}
+
+\usepackage[pages=some]{background}
+
+\usepackage{graphicx} %inclusion of graphics
+\usepackage{tikz}
+\usetikzlibrary{decorations} %curved lines
+\usetikzlibrary{positioning} %coordinates positioning
+\usetikzlibrary{calc}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{fadings}
+\tikzfading[name=fade out, inner color=transparent!0, outer color=transparent!100]
+\def\caseHeight{2em}
+\tikzset{%
+action/.style={%
+	rectangle, rounded corners, minimum size=25mm,
+	very thick, draw=brown!50!black!50,
+	top color=brown!50!black!10,
+	bottom color=brown!50!black!40},
+fadingcircle/.style={%
+	circle, minimum size=25mm,
+	path fading=fade out, fill=red!50!black!10}
+}
+\usepackage{geometry} %page size and margins
+\geometry{top=0pt, bottom=0pt, left=0pt, right=0pt}
+\setlength\parindent{0pt} %no indentation
+
+\backgroundsetup{%
+scale=1,
+opacity=1,
+angle=0,
+contents={\includegraphics[width=\paperwidth,height=\paperheight]{images/bg.png}}}
+
+\newcommand\icon[2]{\includegraphics[height=#2]{images/#1}}
+
+\newcommand\etherialDie[1]{\icon{etherialDie.png}{#1}}
+\newcommand\chameleonDie[1]{\icon{chameleonDie.png}{#1}}
+\newcommand\potency[1]{\icon{potency.png}{#1}}
+\newcommand\threepotency[1]{\icon{threepotency.png}{#1}}
+\newcommand\randomColor[1]{\icon{randomColor.png}{#1}}
+\newcommand\randomMaterial[1]{\icon{randomMaterial.png}{#1}}
+\newcommand\randomEssence[1]{\icon{randomEssence.png}{#1}}
+\newcommand\randomEssenceX[1]{\icon{randomEssenceX.png}{#1}}
+\newcommand\randomTransmutation[1]{\icon{randomTransmutation.png}{#1}}
+\newcommand\randomTransmutationArrow[1]{\icon{randomTransmutationArrow.png}{#1}}
+\newcommand\artifact[1]{\icon{artifact.png}{#1}}
+\newcommand\rechargeArtifact[1]{\icon{rechargeArtifact.png}{#1}}
+\newcommand\performArtifact[1]{\icon{performArtifact.png}{#1}}
+\newcommand\experiment[1]{\icon{experiment.png}{#1}}
+\newcommand\performExperiment[1]{\icon{performExperiment.png}{#1}}
+\newcommand\formula[1]{\icon{formula.png}{#1}}
+\newcommand\performFormula[1]{\icon{performFormula.png}{#1}}
+\newcommand\reaction[1]{\icon{reaction.png}{#1}}
+\newcommand\rechargeReaction[1]{\icon{rechargeReaction.png}{#1}}
+\newcommand\diceBox[1]{\icon{diceBox.png}{#1}}
+\newcommand\bonusToken[1]{\icon{bonusToken.png}{#1}}
+\newcommand\gold[1]{\icon{gold.png}{#1}}
+\newcommand\silver[1]{\icon{silver.png}{#1}}
+\newcommand\anyMaterial[1]{\icon{anyMaterial.png}{#1}}
+\newcommand\anyRawMaterial[1]{\icon{anyRawMaterial.png}{#1}}
+\newcommand\masteryTrack[1]{\icon{masteryTrack.png}{#1}}
+\newcommand\vp[1]{\icon{vp.png}{#1}}
+\newcommand\numberOfFormulas[1]{\icon{numberOfFormulas.png}{#1}}
+\newcommand\publication[1]{\icon{publication.png}{#1}}
+\newcommand\achievement[1]{\icon{achievement.png}{#1}}
+\newcommand\turnOrder[1]{\icon{turnOrder.png}{#1}}
+\newcommand\dice[1]{\icon{dice.png}{#1}}
+\newcommand\advanceMasteryTrack[1]{\icon{advanceMasteryTrack.png}{#1}}
+
+\newcommand\tikzArrow[1]{%
+\begin{tikzpicture}
+	\draw[transparent] (0,0) rectangle (1.5em,1.5em);
+	\draw[draw=brown!60!black!50, line width = 1.5mm, ->] (0,.75em)--(1,.75em);
+\end{tikzpicture}
+}
+
+\newcommand\action[5]{%
+\def\act{#1}
+\def\case{#2}
+\def\material{mat}
+\def\color{col}
+\def\cost{#3}
+\def\one{1}
+\def\three{3}
+\def\mult{#4}
+\def\multtrue{redo}
+\def\react{#5}
+\def\reacttrue{react}
+\def\actHeight{4em}
+\def\caseHeight{2em}
+\def\costHeight{1.5em}
+\node[action] (A) {\act{\actHeight}};
+\draw[opacity=0] ($(A.south west) - (45:20mm)$) rectangle ($(A.north east) + (45:20mm)$);
+\ifx\case\material%
+\node[fadingcircle] at (A.north) {};
+\node at (A.north) {\randomMaterial{\caseHeight}};
+\else\ifx\case\color%
+\node[fadingcircle] at (A.north) {};
+\node at (A.north) {\randomColor{\caseHeight}};
+\fi\fi
+\def\d{6mm};
+\def\redoarc{($ (A.south west) + (350:\d) $) arc (350:107:\d)}
+\ifx\mult\multtrue%
+\draw[draw=brown!60!black!50, line width = 1.5mm] \redoarc;
+\draw[draw=brown!60!black!50, line width = 1.5mm, ->] ($(A.south west) + (101:\d)$) -- ($(A.south west) + (99:\d+0.15)$);
+\else
+\draw[line width = 1.5mm, opacity=0] \redoarc;
+\fi
+\ifx\cost\one%
+\node at (A.south west) {\potency{\costHeight}};
+\else\ifx\cost\three%
+\node at (A.south west) {\threepotency{\costHeight}};
+\fi\fi
+\ifx\react\reacttrue%
+\node at (A.south east) {\reaction{\costHeight}};
+\fi
+}
+
+\begin{document}
+\thispagestyle{empty}
+\BgThispage
+\vspace*{3em}
+\begin{center}
+\begin{minipage}{.35\textwidth}
+\begin{flushleft}
+	\Huge\bf Player Turn
+\end{flushleft}
+\begin{flushleft}
+\huge
+\begin{tabular}{cl}
+	&Draft (\etherialDie{.6em})\\[.5em]
+	\potency{.8em}&Action (\chameleonDie{.6em})\\[.5em]
+	\reaction{.8em}&Reactions\\[.5em]
+	\diceBox{.8em}&Lab cleanup (\bonusToken{.6em})\\[.5em]
+\end{tabular}
+\end{flushleft}
+\end{minipage}
+\begin{minipage}{.35\textwidth}
+\vspace*{1em}
+\begin{flushright}
+\huge
+\begin{tabular}{rcl}
+	\gold{1.5em}&\tikzArrow{1.5em}&\anyMaterial{1.5em}\\[1em]
+	\silver{1.5em}&\tikzArrow{1.5em}&\masteryTrack{1.5em}\\[1em]
+	\anyMaterial{1.5em}&\tikzArrow{1.5em}&\anyRawMaterial{1.5em}\\[1em]
+\end{tabular}
+\end{flushright}
+\end{minipage}
+\end{center}
+\vspace*{5em}
+%\rule{\linewidth}{0.01mm}
+\begin{center}
+	\Huge\bf Actions
+\end{center}
+\vspace*{-4em}
+\begin{center}
+\begin{tikzpicture}
+\matrix[row sep=0mm,column sep=0mm] {%
+	\action{\randomMaterial}{mat}{1}{redo}{react};&
+	\action{\randomEssence}{mat}{1}{redo}{react};&
+	\action{\randomTransmutation}{col}{1}{redo}{react};\\
+	\action{\experiment}{mat}{1}{}{};&
+	\action{\artifact}{col}{3}{}{};&
+	\action{\rechargeArtifact}{}{1}{}{react};\\
+	\action{\performExperiment}{}{}{redo}{};&
+	\action{\formula}{}{}{redo}{};&
+	\action{\performFormula}{}{}{redo}{};\\
+};
+\end{tikzpicture}
+\end{center}
+\newpage
+\thispagestyle{empty}
+\BgThispage
+\vspace*{3em}
+\begin{center}
+\huge\randomTransmutation{.8em}\quad\Huge\bf Transmutation
+\end{center}
+\vspace*{1em}
+\begin{center}
+\huge
+\randomTransmutationArrow{3em}\qquad\qquad\randomEssenceX{3em}\qquad\qquad\advanceMasteryTrack{3em}\qquad\qquad\performArtifact{3em}
+\end{center}
+\vspace*{3em}
+\begin{center}
+\Huge\bf End of Round
+\end{center}
+\begin{center}
+\huge
+\begin{tabular}{rcc}
+Recharge&&$\vcenter{\hbox{\rechargeArtifact{1em}}}$\quad$\vcenter{\hbox{\rechargeReaction{1.5em}}}$\\[1em]
+Replace&&$\vcenter{\hbox{\artifact{1em}}}$\quad$\vcenter{\hbox{\experiment{1.5em}}}$\\[1em]
+Turn order&&$\vcenter{\hbox{\turnOrder{1em}}}$\\[1em]
+Reroll&&$\vcenter{\hbox{\dice{1em}}}$\\[1em]
+\end{tabular}
+\end{center}
+\vspace*{3em}
+\begin{center}
+	\huge\vp{.8em}\quad\Huge\bf End of Game
+\end{center}
+\vspace*{1em}
+\begin{center}
+\huge
+\gold{1.5em}\qquad\etherialDie{1.5em}\\[1.3em]
+$\left(\ \vcenter{\hbox{\huge\numberOfFormulas{1.5em}}}-1\right)^2$\\[1.8em]
+\experiment{1.5em}\quad\publication{1.5em}\quad\achievement{1.5em}\quad\masteryTrack{1em}\\[1.5em]
+\end{center}
+
+\end{document}
