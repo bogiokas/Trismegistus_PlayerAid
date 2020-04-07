@@ -1,2 +1,2 @@
-Trismegistus.pdf: Trismegistus.tex
+Trismegistus.pdf: Trismegistus.tex images/*.png
 	pdflatex ./Trismegistus.tex
